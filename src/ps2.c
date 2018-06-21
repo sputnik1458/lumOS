@@ -26,9 +26,7 @@ const char shift_keys[100] PROGMEM = {'0', '0', '0', '0', '0', '0', '0', '0', '0
                                 };
 
 
-volatile uint8_t scan_code;
-volatile uint8_t bit_n = 0;
-volatile uint8_t loc;
+const uint8_t modifiers[5] PROGMEM = {PS2_LEFT_SHIFT, PS2_LEFT_CONTROL, KEY_BREAK, PS2_ENTER, PS2_BACKSPACE};
 volatile uint8_t status = 0;
 
 void kbd_init() {
@@ -52,59 +50,30 @@ uint8_t get_bit() {
     }
 }
 
-char get_char(volatile uint8_t *scan_code) {
+char get_char(volatile uint8_t scan_code) {
     if (SHIFT_STATUS) {
-        return pgm_read_word_near(shift_keys + *scan_code-1);
+        return pgm_read_word_near(shift_keys + scan_code-1);
     } else {
-        return pgm_read_word_near(keys + *scan_code-1);
+        return pgm_read_word_near(keys + scan_code-1);
     }
 
 }
 
-uint8_t get_keystatus(volatile uint8_t *scan_code) {
-    if (*scan_code == PS2_BACKSPACE) {
-        loc = lcd_getxy();
-        if (~KEY_BREAK_STATUS && (loc != 0)) {
-            if (loc == 64) { // (0, 1)
-                lcd_gotoxy(16, 0);
-            }
-            lcd_command(0x10); // move cursor back
-            lcd_putc(' ');
-            lcd_command(0x10);
+uint8_t get_keystatus(volatile uint8_t scan_code) {
+    int j;
+    for (j = 0; j < 5; j++) {
+        if (scan_code == pgm_read_byte_near(modifiers+j)) {
+            update_status(j);
+            return 0;
         }
-    } else if (*scan_code == KEY_BREAK) {
-        status ^= (1 << KEY_BREAK_REGSTR);
-    } else if (*scan_code == PS2_LEFT_SHIFT) {
-        status ^= (1 << SHIFT_REGSTR);
-    } else if (*scan_code == PS2_LEFT_CONTROL) {
-        status ^= (1 << CONTROL_REGSTR);
-    } else {
-        return 1;
     }
-
-    return 0;
+    return 1;
 }
-ISR(INT) {
 
-    if ((bit_n < 9) || (bit_n > 0)) {
-        scan_code |= (get_bit() << bit_n);
-    }
+uint8_t get_status() {
+    return status;
+}
 
-    if (bit_n == 10) { // full scan code
-
-        scan_code >>= 1; // don't know why but this is needed to get the correct scan code
-        if (~KEY_BREAK_STATUS) { // make press
-            if (get_keystatus(&scan_code)) {
-                lcd_putc(get_char(&scan_code));
-            }
-        } else { // break press
-            get_keystatus(&scan_code); // reset modifier status
-            status ^= (1 << KEY_BREAK_REGSTR);
-
-        }
-        bit_n = 0;
-        scan_code = 0;
-    } else {
-        bit_n++;
-    }
+void update_status(uint8_t modifier) {
+    status ^= (1 << modifier);
 }

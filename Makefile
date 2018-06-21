@@ -11,8 +11,8 @@ flash: kernel.hex
 kernel.hex: kernel.elf
 	${OBJCOPY} -j .text -j .data -O ihex kernel.elf kernel.hex
 
-kernel.elf: lcd.o main.o ps2.o
-	${CC} -mmcu=${BOARD} lcd.o main.o ps2.o -o kernel.elf
+kernel.elf: lcd.o main.o ps2.o tty.o
+	${CC} -mmcu=${BOARD} lcd.o main.o ps2.o tty.o -o kernel.elf
 
 %.o: src/%.c
 	${CC} ${CFLAGS} -c $< -o $@

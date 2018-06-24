@@ -31,9 +31,9 @@
 #define ENTER_REGSTR 3
 #define BACKSPACE_REGSTR 4
 
-#define SHIFT_STATUS status & (1 << SHIFT_REGSTR)
-#define CONTROL_STATUS status & (1 << CONTROL_REGSTR)
-#define KEY_BREAK_STATUS status & (1 << KEY_BREAK_REGSTR)
+#define SHIFT_STATUS get_status() & (1 << SHIFT_REGSTR)
+#define CONTROL_STATUS get_status() & (1 << CONTROL_REGSTR)
+#define KEY_BREAK_STATUS get_status() & (1 << KEY_BREAK_REGSTR)
 
 void kbd_init();
 uint8_t get_bit();

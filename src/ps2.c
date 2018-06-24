@@ -59,8 +59,8 @@ char get_char(volatile uint8_t scan_code) {
 
 }
 
-uint8_t get_keystatus(volatile uint8_t scan_code) {
-    int j;
+uint8_t get_keystatus(volatile uint8_t scan_code) { // TODO: change name
+    uint8_t j;
     for (j = 0; j < 5; j++) {
         if (scan_code == pgm_read_byte_near(modifiers+j)) {
             update_status(j);
@@ -74,6 +74,6 @@ uint8_t get_status() {
     return status;
 }
 
-void update_status(uint8_t modifier) {
+void update_status(uint8_t modifier) { // TODO: create macro
     status ^= (1 << modifier);
 }

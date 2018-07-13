@@ -1,4 +1,6 @@
-#include "fs.h"
+#include "../include/fs.h"
+#include <stdlib.h>
+#include <stdint.h>
 
 void mkfs() {
     int i;
@@ -53,6 +55,23 @@ void mkdir(char name, struct Directory *pwd) {
     }
     eeprom_write_byte((uint8_t*)addr, name);
 
+}
+
+void rm(char name, struct Directory *pwd) {
+    uint16_t i, file_table_addr;
+    uint8_t* addr;
+
+    for (i = 0; i < 15; i++) {
+        addr = pwd->files[i];
+        if (eeprom_read_byte(addr) == name) {
+            file_table_addr = (uint16_t)addr / 8;
+            eeprom_write_byte((uint8_t*)file_table_addr, 0x00);
+            eeprom_write_byte((uint8_t*)file_table_addr+1, 0x00);
+            pwd->files[i] = (uint8_t*)0xFF;
+            eeprom_write_byte((uint8_t*)i+ROOT_DIR+1, (uint16_t)pwd->files[i]);
+            break;
+        }
+    }
 }
 
 void touch(char name) {

@@ -1,8 +1,6 @@
-#include "tty.h"
-#include "fs.h"
-#include <avr/eeprom.h>
-#include <string.h>
-#include <stdlib.h>
+#include "../include/tty.h"
+#include "../include/fs.h"
+
 
 volatile uint8_t data = 0;
 volatile uint8_t scan_code = 0;
@@ -11,12 +9,12 @@ volatile uint8_t bit_n = 0;
 int main() {
     //mkfs();
     struct Directory pwd = fs_init();
-    //mkdir('a', &pwd);
+    //mkdir('$', &pwd);
     tty_init();
     flush_buffer();
 
+    //rm('p', &pwd);
     //ls(&pwd);
-
 
     while (1) {
         if (scan_code != 0) {

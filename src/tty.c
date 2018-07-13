@@ -1,4 +1,4 @@
-#include "tty.h"
+#include "../include/tty.h"
 
 uint8_t loc = 0;
 uint8_t line_i = 0;
@@ -43,11 +43,9 @@ uint8_t tty_output(uint8_t scan_code) {
         } else {
             mod_output(scan_code);
         }
-        // scan_code = 0;
     } else { // break press
         get_keystatus(scan_code); // reset modifier status
         update_status(KEY_BREAK_REGSTR);
-        // scan_code = 0;
     }
     return 0;
 

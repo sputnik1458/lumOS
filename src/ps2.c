@@ -1,5 +1,4 @@
-#include "lcd.h"
-#include "ps2.h"
+#include "../include/ps2.h"
 
 const char keys[100] PROGMEM = {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', // 0-9
                                 '0', '0', '0', '`', '0', '0', '0', '0', '0', '0', // 10-19

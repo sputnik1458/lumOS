@@ -9,12 +9,9 @@ volatile uint8_t bit_n = 0;
 int main() {
     //mkfs();
     struct Directory pwd = fs_init();
-    //mkdir('$', &pwd);
+
     tty_init();
     flush_buffer();
-
-    //rm('p', &pwd);
-    //ls(&pwd);
 
     while (1) {
         if (scan_code != 0) {

@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 void mkfs() {
-    int i;
+    uint16_t i;
     for (i = 0; i < 18; i++) { // file table & root directory usage
         eeprom_write_byte((uint8_t*)i, (uint8_t)0xFF);
     }
@@ -76,6 +76,28 @@ void rm(char name, struct Directory *pwd) {
 
 void touch(char name) {
 
+}
+
+struct Directory cd(char name, struct Directory pwd) {
+    struct Directory dir = pwd;
+    uint16_t i, j, addr;
+
+    if (name == ' ') {
+        dir = fs_init(); // TODO: change
+    } else {
+        for (i = 0; i < 15; i++) {
+            addr = (uint16_t)pwd.files[i];
+            if (eeprom_read_byte((uint8_t*)addr) == name) {
+                dir.addr = (uint8_t*)addr;
+                dir.name = name;
+                for (j = addr+1; j < addr+16; j++) {
+                    dir.files[j-addr-1] = (uint8_t*)(uint16_t)eeprom_read_byte((uint8_t*)j);
+                }
+                break;
+            }
+        }
+    }
+    return dir;
 }
 
 void ls(struct Directory *dir) {

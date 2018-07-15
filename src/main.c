@@ -1,21 +1,21 @@
 #include "../include/tty.h"
 #include "../include/fs.h"
 
-
 volatile uint8_t data = 0;
 volatile uint8_t scan_code = 0;
 volatile uint8_t bit_n = 0;
 
 int main() {
-    //mkfs();
-    struct Directory pwd = fs_init();
 
+    struct Directory pwd = fs_init();
     tty_init();
-    flush_buffer();
+
+    
 
     while (1) {
         if (scan_code != 0) {
-            scan_code = tty_output(scan_code); // always 0
+            tty_output(scan_code);
+            scan_code = 0;
         }
     }
     return 0;

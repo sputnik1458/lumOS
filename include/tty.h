@@ -10,7 +10,7 @@
 void tty_init();
 void tty_newline();
 void tty_scroll();
-uint8_t tty_output(uint8_t scan_code);
+void tty_output(uint8_t scan_code);
 void mod_output(uint8_t scan_code);
 void flush_buffer();
 

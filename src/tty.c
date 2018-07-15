@@ -11,6 +11,8 @@ void tty_init() {
     kbd_init();
     lcd_init(LCD_DISP_ON_CURSOR);
     tty_newline();
+
+    flush_buffer();
 }
 
 void tty_newline() {
@@ -25,21 +27,23 @@ void tty_scroll() {
     lcd_gotoxy(0, 1);
 }
 
-uint8_t tty_output(uint8_t scan_code) {
+void tty_output(uint8_t scan_code) {
+    char c;
     if (~KEY_BREAK_STATUS) { // make press
         if (get_keystatus(scan_code)) {
             if (line_i == 16) {
                 tty_scroll();
                 line_i = 0;
             }
+            c = get_char(scan_code);
             loc = lcd_getxy();
             if ((loc >= 16) && (loc <= 79)) {
-                curr_line[line_i] = get_char(scan_code);
+                curr_line[line_i] = c;
                 line_i++;
             }
-            buffer[buf_i] = get_char(scan_code); // TODO: make var
+            buffer[buf_i] = c; // TODO: make var
             buf_i++;
-            lcd_putc(get_char(scan_code));
+            lcd_putc(c);
         } else {
             mod_output(scan_code);
         }
@@ -47,7 +51,6 @@ uint8_t tty_output(uint8_t scan_code) {
         get_keystatus(scan_code); // reset modifier status
         update_status(KEY_BREAK_REGSTR);
     }
-    return 0;
 
 }
 

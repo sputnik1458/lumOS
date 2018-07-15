@@ -21,8 +21,9 @@ struct File {
 void mkfs();
 struct Directory fs_init();
 void mkdir(char name, struct Directory *pwd);
+void gen_dir(uint16_t addr, struct Directory *dir);
 void rm(char name, struct Directory *pwd);
-struct Directory cd(char name, struct Directory pwd);
+void cd(char name, struct Directory *pwd);
 void touch(char name);
 void ls(struct Directory *dir);
 

@@ -1,6 +1,4 @@
 #include "../include/fs.h"
-#include <stdlib.h>
-#include <stdint.h>
 
 void mkfs() {
     uint16_t i;
@@ -18,13 +16,18 @@ void mkfs() {
 
 struct Directory fs_init() {
     struct Directory root_dir;
-    root_dir.addr = (uint8_t*)ROOT_DIR;
-    root_dir.name = eeprom_read_byte(root_dir.addr);
-    uint16_t i;
-    for (i = ROOT_DIR+1; i < ROOT_DIR+16; i++) {
-        root_dir.files[i-ROOT_DIR-1] = (uint8_t*)(uint16_t)eeprom_read_byte((uint8_t*)i);
-    }
+    gen_dir(ROOT_DIR, &root_dir);
     return root_dir;
+}
+
+void gen_dir(uint16_t addr, struct Directory *dir) {
+    dir->addr = (uint8_t*)addr;
+    dir->name = eeprom_read_byte(dir->addr);
+
+    int i;
+    for (i = addr+1; i < addr+16; i++) {
+        dir->files[i-addr-1] = (uint8_t*)(uint16_t)eeprom_read_byte((uint8_t*)i);
+    }
 }
 
 void mkdir(char name, struct Directory *pwd) {
@@ -78,26 +81,20 @@ void touch(char name) {
 
 }
 
-struct Directory cd(char name, struct Directory pwd) {
-    struct Directory dir = pwd;
-    uint16_t i, j, addr;
+void cd(char name, struct Directory *pwd) {
+    uint16_t i, addr;
 
-    if (name == ' ') {
-        dir = fs_init(); // TODO: change
+    if (name == '.') {
+        gen_dir(ROOT_DIR, pwd);
     } else {
         for (i = 0; i < 15; i++) {
-            addr = (uint16_t)pwd.files[i];
+            addr = (uint16_t)pwd->files[i];
             if (eeprom_read_byte((uint8_t*)addr) == name) {
-                dir.addr = (uint8_t*)addr;
-                dir.name = name;
-                for (j = addr+1; j < addr+16; j++) {
-                    dir.files[j-addr-1] = (uint8_t*)(uint16_t)eeprom_read_byte((uint8_t*)j);
-                }
+                gen_dir(addr, pwd);
                 break;
             }
         }
     }
-    return dir;
 }
 
 void ls(struct Directory *dir) {

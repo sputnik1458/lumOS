@@ -9,7 +9,6 @@ uint8_t buf_i = 0;
 
 void tty_init() {
     kbd_init();
-    lcd_init(LCD_DISP_ON_CURSOR);
     tty_newline();
 
     flush_buffer();

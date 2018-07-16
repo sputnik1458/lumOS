@@ -1,5 +1,4 @@
-#include "../include/tty.h"
-#include "../include/fs.h"
+#include "../include/kernel.h"
 
 volatile uint8_t data = 0;
 volatile uint8_t scan_code = 0;
@@ -7,10 +6,7 @@ volatile uint8_t bit_n = 0;
 
 int main() {
 
-    struct Directory pwd = fs_init();
-    tty_init();
-
-    
+    quickboot();
 
     while (1) {
         if (scan_code != 0) {
@@ -20,10 +16,6 @@ int main() {
     }
     return 0;
 }
-
-
-
-
 
 ISR(INT) {
 

@@ -7,8 +7,8 @@ PORT = /dev/ttyACM0
 kernel.hex: kernel.elf
 	${OBJCOPY} -j .text -j .data -O ihex kernel.elf kernel.hex
 
-kernel.elf: lcd.o main.o ps2.o tty.o fs.o
-	${CC} -mmcu=${BOARD} lcd.o main.o ps2.o tty.o fs.o -o kernel.elf
+kernel.elf: lcd.o main.o ps2.o tty.o fs.o kernel.o
+	${CC} -mmcu=${BOARD} lcd.o main.o ps2.o tty.o fs.o kernel.o -o kernel.elf
 
 %.o: src/%.c
 	${CC} ${CFLAGS} -c $< -o $@

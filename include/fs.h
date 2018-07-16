@@ -19,12 +19,13 @@ struct File {
 };
 
 void mkfs();
-struct Directory fs_init();
-void mkdir(char name, struct Directory *pwd);
-void gen_dir(uint16_t addr, struct Directory *dir);
-void rm(char name, struct Directory *pwd);
-void cd(char name, struct Directory *pwd);
+void fs_init();
+void mkdir(char name);
+void gen_dir(uint16_t addr);
+struct Directory* get_pwd();
+void rm(char name);
+void cd(char name);
 void touch(char name);
-void ls(struct Directory *dir);
+void ls();
 
 #endif /* FS_H */

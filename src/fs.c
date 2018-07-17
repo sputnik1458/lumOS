@@ -1,4 +1,5 @@
 #include "../include/fs.h"
+#include <util/delay.h>
 
 struct Directory pwd;
 
@@ -34,7 +35,8 @@ struct Directory* get_pwd() {
     return &pwd;
 }
 
-void mkdir(char name) {
+void mkdir(char** args) {
+    char name = args[1][0];
     uint16_t i, free_space = 0;
     uint16_t addr;
     // finds free free space in file table
@@ -64,7 +66,8 @@ void mkdir(char name) {
 
 }
 
-void rm(char name) {
+void rm(char** args) {
+    char name = args[1][0];
     uint16_t i, file_table_addr;
     uint8_t* addr;
 
@@ -85,7 +88,8 @@ void touch(char name) {
 
 }
 
-void cd(char name) {
+void cd(char** args) {
+    char name = args[1][0];
     uint16_t i, addr;
 
     if (name == '.') {
@@ -101,11 +105,13 @@ void cd(char name) {
     }
 }
 
-void ls() {
+void ls(char** args) {
     uint8_t i;
     for (i = 0; i < 15; i++) {
         if ((uint16_t)pwd.files[i] != 0xFF) {
+            lcd_putc(' ');
             lcd_putc(eeprom_read_byte(pwd.files[i]));
         }
     }
+    _delay_ms(500);
 }

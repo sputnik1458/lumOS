@@ -55,6 +55,8 @@ void tty_output(uint8_t scan_code) {
 
 void mod_output(uint8_t scan_code) {
     if (scan_code == PS2_ENTER) {
+        parse_input(buffer);
+        _delay_ms(500);
         tty_newline();
         scan_code = 0;
         line_i = 0;

@@ -6,6 +6,7 @@
 #include <util/delay.h>
 #include "lcd.h"
 #include "ps2.h"
+#include "shell.h"
 
 void tty_init();
 void tty_newline();

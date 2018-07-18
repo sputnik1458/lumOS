@@ -20,12 +20,7 @@ struct File {
 
 void mkfs();
 void fs_init();
-void mkdir(char** args);
 void gen_dir(uint16_t addr);
 struct Directory* get_pwd();
-void rm(char** args);
-void cd(char** args);
-void touch(char name);
-void ls(char**args);
 
 #endif /* FS_H */

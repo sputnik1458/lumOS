@@ -6,8 +6,11 @@ A lightweight operating system for AVR microcontrollers
 * [LCD display driver](http://tinyurl.com/peterfleury)
 * Terminal
 * EEPROM File System
+* Shell
 
 ## Usage
 Modify values in the Makefile and header files for your specific microcontroller and circuit (i.e. clock speed, pins, interrupts, port).
 
 Run `sudo make` to compile and `make flash` to install.
+
+Currently only officially supports the ATMega328 (Arduino).

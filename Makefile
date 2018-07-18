@@ -3,7 +3,7 @@ OBJCOPY = avr-objcopy
 CFLAGS = -g -mmcu=${BOARD} -Wall -Os -DF_CPU=16000000UL
 BOARD = atmega328p
 PORT = /dev/ttyACM0
-OBJ = lcd.o main.o ps2.o tty.o fs.o kernel.o shell.o
+OBJ = lcd.o main.o ps2.o tty.o fs.o kernel.o shell.o commands.o
 
 lumos.hex: lumos.elf
 	${OBJCOPY} -j .text -j .data -O ihex lumos.elf lumos.hex

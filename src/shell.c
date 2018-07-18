@@ -1,10 +1,10 @@
 #include <string.h>
 #include <util/delay.h>
 #include "../include/shell.h"
-#include "../include/fs.h"
+#include "../include/commands.h"
 
-char* commands[NUM_COMMANDS] = {"ls", "mkdir", "cd", "rm"};
-void (*builtin_func[])(char**) = {&ls, &mkdir, &cd, &rm};
+char* commands[NUM_COMMANDS] = {"ls", "mkdir", "cd", "rm", "pwd"};
+void (*builtin_func[])(char**) = {&_ls, &_mkdir, &_cd, &_rm, &_pwd};
 
 void parse_input(char* input) {
     char* tokens[8];

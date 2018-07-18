@@ -2,7 +2,7 @@
 #define SHELL_H
 
 #define BUF_SIZE 16
-#define NUM_COMMANDS 4
+#define NUM_COMMANDS 5
 
 void parse_input(char* input);
 void run_command(char** tokens);

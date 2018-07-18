@@ -7,6 +7,7 @@ volatile uint8_t bit_n = 0;
 int main() {
 
     quickboot();
+    //boot();
 
     while (1) {
         if (scan_code != 0) {

@@ -3,8 +3,8 @@
 #include "../include/shell.h"
 #include "../include/commands.h"
 
-char* commands[NUM_COMMANDS] = {"ls", "mkdir", "cd", "rm", "pwd"};
-void (*builtin_func[])(char**) = {&_ls, &_mkdir, &_cd, &_rm, &_pwd};
+char* commands[NUM_COMMANDS] = {"ls", "mkdir", "touch", "cd", "rm", "pwd", "set", "get"};
+void (*builtin_func[])(char**) = {&_ls, &_mkdir, &_touch, &_cd, &_rm, &_pwd, &_set, &_get};
 
 void parse_input(char* input) {
     char* tokens[8];
@@ -20,7 +20,6 @@ void parse_input(char* input) {
 }
 
 void run_command(char** tokens) {
-
     uint8_t i;
     for (i = 0; i < NUM_COMMANDS; i++) {
         if (strcmp(tokens[0], commands[i]) == 0) {

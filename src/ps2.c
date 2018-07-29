@@ -25,7 +25,7 @@ const char shift_keys[100] PROGMEM = {'0', '0', '0', '0', '0', '0', '0', '0', '0
                                 };
 
 
-const uint8_t modifiers[5] PROGMEM = {PS2_LEFT_SHIFT, PS2_LEFT_CONTROL, KEY_BREAK, PS2_ENTER, PS2_BACKSPACE};
+const uint8_t modifiers[6] PROGMEM = {PS2_LEFT_SHIFT, PS2_LEFT_CONTROL, KEY_BREAK, PS2_ENTER, PS2_BACKSPACE, PS2_KEYPAD};
 volatile uint8_t status = 0;
 
 void kbd_init() {
@@ -60,11 +60,15 @@ char get_char(volatile uint8_t scan_code) {
 
 uint8_t get_keystatus(volatile uint8_t scan_code) { // TODO: change name
     uint8_t j;
-    for (j = 0; j < 5; j++) {
+    for (j = 0; j < 6; j++) {
         if (scan_code == pgm_read_byte_near(modifiers+j)) {
             update_status(j);
             return 0;
         }
+    }
+
+    if ((KEYPAD_STATUS) || (CONTROL_STATUS)) {
+        return 0;
     }
     return 1;
 }

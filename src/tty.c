@@ -1,20 +1,23 @@
 #include "../include/tty.h"
+#include <string.h>
 
 uint8_t loc = 0;
 uint8_t line_i = 0;
 char curr_line[17];
 char buffer[64];
 uint8_t buf_i = 0;
+char clipboard[64];
 
 
 void tty_init() {
     kbd_init();
     tty_newline();
-
-    flush_buffer();
 }
 
 void tty_newline() {
+    //scan_code = 0;
+    line_i = 0;
+    flush_buffer();
     lcd_clrscr();
     lcd_putc('~');
     lcd_putc(' ');
@@ -40,11 +43,11 @@ void tty_output(uint8_t scan_code) {
                 curr_line[line_i] = c;
                 line_i++;
             }
-            buffer[buf_i] = c; // TODO: make var
+            buffer[buf_i] = c;
             buf_i++;
             lcd_putc(c);
         } else {
-            mod_output(scan_code);
+            special_key(scan_code);
         }
     } else { // break press
         get_keystatus(scan_code); // reset modifier status
@@ -53,15 +56,10 @@ void tty_output(uint8_t scan_code) {
 
 }
 
-void mod_output(uint8_t scan_code) {
+void special_key(uint8_t scan_code) {
     if (scan_code == PS2_ENTER) {
         lcd_gotoxy(0, 1);
         parse_input(buffer);
-        _delay_ms(500);
-        tty_newline();
-        scan_code = 0;
-        line_i = 0;
-        flush_buffer();
     } else if (scan_code == PS2_BACKSPACE) {
         loc = lcd_getxy();
         if (~KEY_BREAK_STATUS && (loc != 0)) {
@@ -73,12 +71,26 @@ void mod_output(uint8_t scan_code) {
             }
             buffer[buf_i] = 0;
             buf_i--;
-            lcd_command(0x10); // move cursor back
+            lcd_command(LCD_MOVE_CURSOR_LEFT);
             lcd_putc(' ');
-            lcd_command(0x10);
+            lcd_command(LCD_MOVE_CURSOR_LEFT);
 
         }
-        scan_code = 0;
+    } else if ((scan_code == KEYPAD_DOWN) || (scan_code == 0x4B)) { // down arrow or ctrl-L
+        tty_newline();
+    // } else if (scan_code == KEYPAD_LEFT) {
+    //     lcd_command(LCD_MOVE_CURSOR_LEFT);
+    //     buf_i--;
+    // } else if (scan_code == KEYPAD_RIGHT) {
+    //     lcd_command(LCD_MOVE_CURSOR_RIGHT);
+    //     buf_i++;
+    } else if (scan_code == 0x21) { // ctrl-c
+        strcpy(clipboard, buffer);
+    } else if (scan_code == 0x22) { // ctrl-x
+        strcpy(clipboard, buffer);
+        tty_newline();
+    } else if (scan_code == 0x2A) { // ctrl-v
+        lcd_puts(clipboard);
     }
 }
 

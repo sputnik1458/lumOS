@@ -25,16 +25,24 @@
 #define PS2_ENTER 0x5A
 #define PS2_BACKSPACE 0x66
 #define KEY_BREAK 0x70
+#define PS2_KEYPAD 0x60
+
+#define KEYPAD_UP 0x75
+#define KEYPAD_LEFT 0x6B
+#define KEYPAD_RIGHT 0x74
+#define KEYPAD_DOWN 0x72
 
 #define SHIFT_REGSTR 0
 #define CONTROL_REGSTR 1
 #define KEY_BREAK_REGSTR 2
 #define ENTER_REGSTR 3
 #define BACKSPACE_REGSTR 4
+#define KEYPAD_REGSTR 5
 
 #define SHIFT_STATUS get_status() & (1 << SHIFT_REGSTR)
 #define CONTROL_STATUS get_status() & (1 << CONTROL_REGSTR)
 #define KEY_BREAK_STATUS get_status() & (1 << KEY_BREAK_REGSTR)
+#define KEYPAD_STATUS get_status() & (1 << KEYPAD_REGSTR)
 
 void kbd_init();
 uint8_t get_bit();

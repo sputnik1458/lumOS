@@ -5,7 +5,7 @@ volatile uint8_t scan_code = 0;
 volatile uint8_t bit_n = 0;
 
 int main() {
-
+    //mkfs();
     quickboot();
     //boot();
 

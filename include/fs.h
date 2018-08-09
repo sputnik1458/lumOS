@@ -21,6 +21,8 @@ struct File {
 void mkfs();
 void fs_init();
 void gen_dir(uint16_t addr);
+uint8_t* allocate(uint8_t size);
+void clear(uint8_t* addr);
 struct Directory* get_pwd();
 
 #endif /* FS_H */

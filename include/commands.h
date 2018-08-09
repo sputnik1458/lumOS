@@ -15,5 +15,7 @@ void _ls(char**args);
 void _pwd(char** args);
 void _set(char** args);
 void _get(char** args);
+void _read(char** args);
+void _write(char** args);
 
 #endif /* COMMANDS_H */
